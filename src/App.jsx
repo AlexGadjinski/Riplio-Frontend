@@ -11,6 +11,7 @@ import TrendingPage from './pages/TrendingPage'
 import PostPage from './pages/PostPage'
 import MembersPage from './pages/MembersPage'
 import BansPage from './pages/BansPage'
+import CommunitySettingsPage from './pages/CommunitySettingsPage'
 
 function App() {
     return (
@@ -33,6 +34,7 @@ function App() {
                         <Route path="/posts/:id" element={<PostPage/>}/>
                         <Route path="/communities/:id/members" element={<MembersPage/>}/>
                         <Route path="/communities/:id/bans" element={<BansPage />} />
+                        <Route path="/communities/:id/settings" element={<CommunitySettingsPage />} />
                     </Route>
                 </Routes>
             </BrowserRouter>
