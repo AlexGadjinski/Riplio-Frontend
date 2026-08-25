@@ -1,15 +1,16 @@
-import { useState } from 'react'
-import { Avatar, Button, Space, Typography, Popconfirm, Input, message } from 'antd'
-import { UserOutlined } from '@ant-design/icons'
+import {useState} from 'react'
+import {Avatar, Button, Input, message, Popconfirm, Space, Typography} from 'antd'
+import {UserOutlined} from '@ant-design/icons'
 import axiosClient from '../api/axiosClient'
-import { handleApiError } from '../utils/errorHandler'
-import { useAuth } from '../context/AuthContext'
+import {handleApiError} from '../utils/errorHandler'
+import {useAuth} from '../context/AuthContext'
 import CommentComposer from './CommentComposer'
 import PostMedia from './PostMedia'
 import RippleVote from './RippleVote'
+import ReportModal from './ReportModal'
 
-function CommentNode({ comment }) {
-    const { user } = useAuth()
+function CommentNode({comment}) {
+    const {user} = useAuth()
     const [replies, setReplies] = useState([])
     const [repliesLoaded, setRepliesLoaded] = useState(false)
     const [showReplies, setShowReplies] = useState(false)
@@ -19,6 +20,7 @@ function CommentNode({ comment }) {
     const [content, setContent] = useState(comment.content)
     const [editValue, setEditValue] = useState(comment.content)
     const [status, setStatus] = useState(comment.status)
+    const [reportOpen, setReportOpen] = useState(false)
 
     const isActive = status === 'ACTIVE'
     const isOwner = user?.username === comment.authorUsername
@@ -26,7 +28,7 @@ function CommentNode({ comment }) {
     const loadReplies = async () => {
         try {
             const response = await axiosClient.get(`/comments/${comment.id}/replies`, {
-                params: { size: 50, sort: 'createdOn,desc' },
+                params: {size: 50, sort: 'createdOn,desc'},
             })
             setReplies(response.data.content)
             setRepliesLoaded(true)
@@ -83,22 +85,22 @@ function CommentNode({ comment }) {
     }
 
     return (
-        <div style={{ marginBottom: 16 }}>
+        <div style={{marginBottom: 16}}>
             <Space align="start" size={8}>
-                <Avatar size={28} src={comment.authorAvatarUrl} icon={<UserOutlined />} />
+                <Avatar size={28} src={comment.authorAvatarUrl} icon={<UserOutlined/>}/>
                 <div>
                     <Typography.Text strong>{comment.authorUsername}</Typography.Text>
-                    <Typography.Text type="secondary" style={{ marginLeft: 8, fontSize: 12 }}>
+                    <Typography.Text type="secondary" style={{marginLeft: 8, fontSize: 12}}>
                         {new Date(comment.createdOn).toLocaleDateString()}
                     </Typography.Text>
                 </div>
             </Space>
 
-            <div style={{ marginLeft: 36 }}>
+            <div style={{marginLeft: 36}}>
                 {editing ? (
-                    <div style={{ marginTop: 8 }}>
-                        <Input.TextArea rows={3} value={editValue} onChange={(e) => setEditValue(e.target.value)} />
-                        <Space style={{ marginTop: 8 }}>
+                    <div style={{marginTop: 8}}>
+                        <Input.TextArea rows={3} value={editValue} onChange={(e) => setEditValue(e.target.value)}/>
+                        <Space style={{marginTop: 8}}>
                             <Button type="primary" size="small" onClick={handleEdit}>Save</Button>
                             <Button size="small" onClick={() => setEditing(false)}>Cancel</Button>
                         </Space>
@@ -108,7 +110,7 @@ function CommentNode({ comment }) {
                         style={{
                             marginTop: 4,
                             marginBottom: 8,
-                            ...(isActive ? {} : { fontStyle: 'italic', color: '#999' }),
+                            ...(isActive ? {} : {fontStyle: 'italic', color: '#999'}),
                         }}
                     >
                         {content}
@@ -116,12 +118,12 @@ function CommentNode({ comment }) {
                 )}
 
                 {comment.imageUrl && isActive ? (
-                    <div style={{ marginBottom: 8 }}>
-                        <PostMedia mediaUrl={comment.imageUrl} mediaType="IMAGE" alt="comment image" />
+                    <div style={{marginBottom: 8}}>
+                        <PostMedia mediaUrl={comment.imageUrl} mediaType="IMAGE" alt="comment image"/>
                     </div>
                 ) : null}
 
-                <Space size={16} style={{ marginBottom: 8 }} align="center">
+                <Space size={16} style={{marginBottom: 8}} align="center">
                     {isActive ? (
                         <RippleVote
                             targetType="comments"
@@ -131,7 +133,8 @@ function CommentNode({ comment }) {
                         />
                     ) : null}
                     {isActive ? (
-                        <Button type="link" size="small" style={{ padding: 0 }} onClick={() => setShowReplyBox((p) => !p)}>
+                        <Button type="link" size="small" style={{padding: 0}}
+                                onClick={() => setShowReplyBox((p) => !p)}>
                             Reply
                         </Button>
                     ) : null}
@@ -139,7 +142,7 @@ function CommentNode({ comment }) {
                         <Button
                             type="link"
                             size="small"
-                            style={{ padding: 0 }}
+                            style={{padding: 0}}
                             onClick={() => {
                                 setEditing(true)
                                 setEditValue(content)
@@ -149,32 +152,45 @@ function CommentNode({ comment }) {
                         </Button>
                     ) : null}
                     {isActive && isOwner ? (
-                        <Popconfirm title="Delete this comment?" onConfirm={handleDelete} okText="Delete" cancelText="Cancel">
-                            <Button type="link" size="small" danger style={{ padding: 0 }}>Delete</Button>
+                        <Popconfirm title="Delete this comment?" onConfirm={handleDelete} okText="Delete"
+                                    cancelText="Cancel">
+                            <Button type="link" size="small" danger style={{padding: 0}}>Delete</Button>
                         </Popconfirm>
+                    ) : null}
+                    {isActive && !isOwner ? (
+                        <Button type="link" size="small" style={{padding: 0}} onClick={() => setReportOpen(true)}>
+                            Report
+                        </Button>
                     ) : null}
                 </Space>
 
                 {showReplyBox ? (
-                    <CommentComposer onSubmit={handleReply} placeholder="Write a reply..." submitLabel="Reply" />
+                    <CommentComposer onSubmit={handleReply} placeholder="Write a reply..." submitLabel="Reply"/>
                 ) : null}
 
                 {replyCount > 0 ? (
-                    <div style={{ marginTop: 4 }}>
-                        <Button type="link" size="small" style={{ padding: 0 }} onClick={toggleReplies}>
+                    <div style={{marginTop: 4}}>
+                        <Button type="link" size="small" style={{padding: 0}} onClick={toggleReplies}>
                             {showReplies ? 'Hide replies' : `Show replies (${replyCount})`}
                         </Button>
                     </div>
                 ) : null}
 
                 {showReplies ? (
-                    <div style={{ marginLeft: 16, borderLeft: '2px solid #f0f0f0', paddingLeft: 16, marginTop: 12 }}>
+                    <div style={{marginLeft: 16, borderLeft: '2px solid #f0f0f0', paddingLeft: 16, marginTop: 12}}>
                         {replies.map((reply) => (
-                            <CommentNode key={reply.id} comment={reply} />
+                            <CommentNode key={reply.id} comment={reply}/>
                         ))}
                     </div>
                 ) : null}
             </div>
+
+            <ReportModal
+                open={reportOpen}
+                onClose={() => setReportOpen(false)}
+                targetType="comments"
+                targetId={comment.id}
+            />
         </div>
     )
 }

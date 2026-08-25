@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from 'react'
-import {Avatar, Card, Divider, Empty, message, Space, Spin, Typography} from 'antd'
+import {Avatar, Button, Card, Divider, Empty, message, Space, Spin, Typography} from 'antd'
 import {useNavigate, useParams} from 'react-router-dom'
 import axiosClient from '../api/axiosClient'
 import {handleApiError} from '../utils/errorHandler'
@@ -7,6 +7,7 @@ import PostMedia from '../components/PostMedia'
 import CommentComposer from '../components/CommentComposer'
 import CommentNode from '../components/CommentNode'
 import RippleVote from '../components/RippleVote'
+import ReportModal from '../components/ReportModal'
 
 function PostPage() {
     const {id} = useParams()
@@ -15,6 +16,7 @@ function PostPage() {
     const [loading, setLoading] = useState(true)
     const [comments, setComments] = useState([])
     const [commentsLoading, setCommentsLoading] = useState(true)
+    const [reportOpen, setReportOpen] = useState(false)
 
     useEffect(() => {
         axiosClient
@@ -88,6 +90,9 @@ function PostPage() {
                     />
                     <span>💬 {post.commentCount}</span>
                     <Typography.Text type="secondary">by {post.authorUsername}</Typography.Text>
+                    <Button type="link" size="small" style={{padding: 0}} onClick={() => setReportOpen(true)}>
+                        Report
+                    </Button>
                 </Space>
             </Card>
 
@@ -104,6 +109,13 @@ function PostPage() {
             ) : (
                 comments.map((comment) => <CommentNode key={comment.id} comment={comment}/>)
             )}
+
+            <ReportModal
+                open={reportOpen}
+                onClose={() => setReportOpen(false)}
+                targetType="posts"
+                targetId={post.id}
+            />
         </div>
     )
 }
