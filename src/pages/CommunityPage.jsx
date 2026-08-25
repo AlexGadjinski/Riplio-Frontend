@@ -8,6 +8,7 @@ import { handleApiError } from '../utils/errorHandler'
 import { useInfiniteScroll } from '../hooks/useInfiniteScroll'
 import { useAuth } from '../context/AuthContext'
 import PostCard from '../components/PostCard'
+import CreatePostModal from '../components/CreatePostModal'
 
 const PAGE_SIZE = 20
 
@@ -21,6 +22,7 @@ function CommunityPage() {
     const [isMember, setIsMember] = useState(false)
     const [submitting, setSubmitting] = useState(false)
     const [isModerator, setIsModerator] = useState(false)
+    const [createPostOpen, setCreatePostOpen] = useState(false)
 
     useEffect(() => {
         axiosClient
@@ -136,6 +138,12 @@ function CommunityPage() {
 
             <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start' }}>
                 <div style={{ flex: 1, minWidth: 0 }}>
+                    {isMember ? (
+                        <Button type="primary" block style={{ marginBottom: 16 }} onClick={() => setCreatePostOpen(true)}>
+                            Create post
+                        </Button>
+                    ) : null}
+
                     {initialLoading ? (
                         <div style={{ textAlign: 'center', paddingTop: 40 }}>
                             <Spin size="large" />
@@ -170,7 +178,6 @@ function CommunityPage() {
                             Created {new Date(community.createdOn).toLocaleDateString()}
                         </Typography.Text>
                     </Card>
-
                     <Card title="Moderators" style={{ marginTop: 16 }}>
                         {moderators.length === 0 ? (
                             <Typography.Text type="secondary">No moderators yet.</Typography.Text>
@@ -187,6 +194,16 @@ function CommunityPage() {
                     </Card>
                 </div>
             </div>
+
+            <CreatePostModal
+                open={createPostOpen}
+                onClose={() => setCreatePostOpen(false)}
+                communityId={id}
+                onCreated={(post) => {
+                    setCreatePostOpen(false)
+                    navigate(`/posts/${post.id}`)
+                }}
+            />
         </div>
     )
 }

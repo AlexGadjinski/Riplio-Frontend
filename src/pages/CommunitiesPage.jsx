@@ -1,15 +1,17 @@
-import { useCallback } from 'react'
-import { Card, Avatar, Spin, Empty, Divider, Typography } from 'antd'
+import { useCallback, useState } from 'react'
+import { Card, Avatar, Spin, Empty, Divider, Typography, Button } from 'antd'
 import { TeamOutlined } from '@ant-design/icons'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useNavigate } from 'react-router-dom'
 import axiosClient from '../api/axiosClient'
 import { useInfiniteScroll } from '../hooks/useInfiniteScroll'
+import CreateCommunityModal from '../components/CreateCommunityModal'
 
 const PAGE_SIZE = 20
 
 function CommunitiesPage() {
     const navigate = useNavigate()
+    const [createOpen, setCreateOpen] = useState(false)
 
     const fetchPage = useCallback(async (page) => {
         const response = await axiosClient.get('/communities', {
@@ -30,12 +32,19 @@ function CommunitiesPage() {
 
     return (
         <div>
-            <Typography.Title level={2} style={{ marginBottom: 4 }}>
-                Communities
-            </Typography.Title>
-            <Typography.Paragraph type="secondary" style={{ marginBottom: 24 }}>
-                Discover communities and dive in.
-            </Typography.Paragraph>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
+                <div>
+                    <Typography.Title level={2} style={{ marginBottom: 4 }}>
+                        Communities
+                    </Typography.Title>
+                    <Typography.Paragraph type="secondary" style={{ margin: 0 }}>
+                        Discover communities and dive in.
+                    </Typography.Paragraph>
+                </div>
+                <Button type="primary" onClick={() => setCreateOpen(true)}>
+                    Create community
+                </Button>
+            </div>
 
             {items.length === 0 ? (
                 <Empty description="No communities yet" />
@@ -76,6 +85,15 @@ function CommunitiesPage() {
                     ))}
                 </InfiniteScroll>
             )}
+
+            <CreateCommunityModal
+                open={createOpen}
+                onClose={() => setCreateOpen(false)}
+                onCreated={(community) => {
+                    setCreateOpen(false)
+                    navigate(`/communities/${community.id}`)
+                }}
+            />
         </div>
     )
 }
