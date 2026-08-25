@@ -5,6 +5,8 @@ import AppLayout from './components/AppLayout'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import HomePage from './pages/HomePage'
+import CommunitiesPage from './pages/CommunitiesPage'
+import CommunityPage from './pages/CommunityPage'
 
 function App() {
     return (
@@ -21,6 +23,8 @@ function App() {
                         }
                     >
                         <Route path="/" element={<HomePage />} />
+                        <Route path="/communities" element={<CommunitiesPage />} />
+                        <Route path="/communities/:id" element={<CommunityPage />} />
                     </Route>
                 </Routes>
             </BrowserRouter>

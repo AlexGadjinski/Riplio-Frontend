@@ -1,10 +1,11 @@
 import { Card, Button, Row, Col } from 'antd'
 import { TeamOutlined, FireOutlined, RocketOutlined } from '@ant-design/icons'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 function HomePage() {
     const { user } = useAuth()
+    const navigate = useNavigate()
 
     return (
         <div>
@@ -26,24 +27,26 @@ function HomePage() {
                 <p style={{ fontSize: 16, opacity: 0.9, marginBottom: 24 }}>
                     Dive into communities, share posts and send ripples across Riplio.
                 </p>
-                <Link to="/communities">
-                    <Button type="primary" size="large" icon={<RocketOutlined />}>
-                        Browse communities
-                    </Button>
-                </Link>
+                <Button
+                    type="primary"
+                    size="large"
+                    icon={<RocketOutlined />}
+                    onClick={() => navigate('/communities')}
+                >
+                    Browse communities
+                </Button>
             </div>
 
             <Row gutter={16}>
                 <Col xs={24} sm={8}>
-                    <Card hoverable>
+                    <Card hoverable onClick={() => navigate('/communities')}>
                         <TeamOutlined style={{ fontSize: 28, color: '#0891b2' }} />
                         <h3 style={{ marginTop: 12 }}>Communities</h3>
                         <p style={{ color: '#888' }}>Find your people and join the conversation.</p>
-                        <Link to="/communities">Explore →</Link>
                     </Card>
                 </Col>
                 <Col xs={24} sm={8}>
-                    <Card hoverable>
+                    <Card hoverable onClick={() => navigate('/communities')}>
                         <FireOutlined style={{ fontSize: 28, color: '#f97316' }} />
                         <h3 style={{ marginTop: 12 }}>Trending</h3>
                         <p style={{ color: '#888' }}>See the posts making the biggest ripples right now.</p>
