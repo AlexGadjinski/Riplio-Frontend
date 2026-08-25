@@ -2,17 +2,18 @@ import { useCallback, useState } from 'react'
 import { Avatar, Button, Card, Empty, Modal, Input, Space, Spin, Tag, Typography, Divider, message } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { useParams } from 'react-router-dom'
 import axiosClient from '../api/axiosClient'
 import { handleApiError } from '../utils/errorHandler'
 import { useInfiniteScroll } from '../hooks/useInfiniteScroll'
 import { useAuth } from '../context/AuthContext'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const PAGE_SIZE = 20
 
 function MembersPage() {
     const { id } = useParams()
     const { user } = useAuth()
+    const navigate = useNavigate()
     const [banTarget, setBanTarget] = useState(null)
     const [banReason, setBanReason] = useState('')
     const [banning, setBanning] = useState(false)
@@ -70,7 +71,12 @@ function MembersPage() {
 
     return (
         <div>
-            <Typography.Title level={2}>Manage members</Typography.Title>
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
+                <Typography.Title level={2} style={{ margin: 0 }}>Manage members</Typography.Title>
+                <Button style={{ marginLeft: 'auto' }} onClick={() => navigate(`/communities/${id}/bans`)}>
+                    Banned users
+                </Button>
+            </div>
 
             {initialLoading ? (
                 <div style={{ textAlign: 'center', paddingTop: 40 }}>

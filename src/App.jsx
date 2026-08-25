@@ -10,6 +10,7 @@ import CommunityPage from './pages/CommunityPage'
 import TrendingPage from './pages/TrendingPage'
 import PostPage from './pages/PostPage'
 import MembersPage from './pages/MembersPage'
+import BansPage from './pages/BansPage'
 
 function App() {
     return (
@@ -31,6 +32,7 @@ function App() {
                         <Route path="/trending" element={<TrendingPage/>}/>
                         <Route path="/posts/:id" element={<PostPage/>}/>
                         <Route path="/communities/:id/members" element={<MembersPage/>}/>
+                        <Route path="/communities/:id/bans" element={<BansPage />} />
                     </Route>
                 </Routes>
             </BrowserRouter>
