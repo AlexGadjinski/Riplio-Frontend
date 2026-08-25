@@ -20,6 +20,7 @@ function CommunityPage() {
     const [moderators, setModerators] = useState([])
     const [isMember, setIsMember] = useState(false)
     const [submitting, setSubmitting] = useState(false)
+    const [isModerator, setIsModerator] = useState(false)
 
     useEffect(() => {
         axiosClient
@@ -36,6 +37,8 @@ function CommunityPage() {
                 const members = response.data.content
                 setModerators(members.filter((member) => member.role === 'MODERATOR'))
                 setIsMember(members.some((member) => member.userId === user?.id))
+                const me = members.find((member) => member.userId === user?.id)
+                setIsModerator(me?.role === 'MODERATOR')
             })
             .catch(() => {})
     }, [id, user])
@@ -109,14 +112,19 @@ function CommunityPage() {
                             {community.description}
                         </Typography.Paragraph>
                     </div>
-                    <Button
-                        type={isMember ? 'default' : 'primary'}
-                        danger={isMember}
-                        loading={submitting}
-                        onClick={handleMembership}
-                    >
-                        {isMember ? 'Leave' : 'Join'}
-                    </Button>
+                    <Space>
+                        {isModerator ? (
+                            <Button onClick={() => navigate(`/communities/${id}/members`)}>Manage members</Button>
+                        ) : null}
+                        <Button
+                            type={isMember ? 'default' : 'primary'}
+                            danger={isMember}
+                            loading={submitting}
+                            onClick={handleMembership}
+                        >
+                            {isMember ? 'Leave' : 'Join'}
+                        </Button>
+                    </Space>
                 </div>
             </Card>
 

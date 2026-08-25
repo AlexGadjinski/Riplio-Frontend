@@ -27,5 +27,5 @@ export function useInfiniteScroll(fetchPage) {
         loadMore()
     }, [])
 
-    return { items, hasMore, loadMore, initialLoading }
+    return { items, setItems, hasMore, loadMore, initialLoading }
 }
