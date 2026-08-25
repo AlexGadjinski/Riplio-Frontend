@@ -1,5 +1,5 @@
 import { Card, Button, Row, Col } from 'antd'
-import { TeamOutlined, FireOutlined, RocketOutlined } from '@ant-design/icons'
+import { TeamOutlined, FireOutlined, UserOutlined, RocketOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
@@ -53,10 +53,10 @@ function HomePage() {
                     </Card>
                 </Col>
                 <Col xs={24} sm={8}>
-                    <Card hoverable>
-                        <RocketOutlined style={{ fontSize: 28, color: '#2563eb' }} />
-                        <h3 style={{ marginTop: 12 }}>Get started</h3>
-                        <p style={{ color: '#888' }}>Create a post and share your first ripple.</p>
+                    <Card hoverable onClick={() => navigate('/profile')}>
+                        <UserOutlined style={{ fontSize: 28, color: '#2563eb' }} />
+                        <h3 style={{ marginTop: 12 }}>Your profile</h3>
+                        <p style={{ color: '#888' }}>View your posts, comments and edit your profile.</p>
                     </Card>
                 </Col>
             </Row>

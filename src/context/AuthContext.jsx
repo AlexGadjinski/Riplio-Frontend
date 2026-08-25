@@ -1,12 +1,12 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useMemo, useState } from 'react'
 
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
     const [token, setToken] = useState(() => localStorage.getItem('token'))
     const [user, setUser] = useState(() => {
-        const raw = localStorage.getItem('user')
-        return raw ? JSON.parse(raw) : null
+        const stored = localStorage.getItem('user')
+        return stored ? JSON.parse(stored) : null
     })
 
     const login = (newToken, newUser) => {
@@ -23,13 +23,23 @@ export function AuthProvider({ children }) {
         setUser(null)
     }
 
-    return (
-        <AuthContext.Provider value={{ token, user, login, logout, isAuthenticated: !!token }}>
-            {children}
-        </AuthContext.Provider>
+    const updateUser = (newUser) => {
+        localStorage.setItem('user', JSON.stringify(newUser))
+        setUser(newUser)
+    }
+
+    const value = useMemo(
+        () => ({ token, user, isAuthenticated: !!token, login, logout, updateUser }),
+        [token, user]
     )
+
+    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
 export function useAuth() {
-    return useContext(AuthContext)
+    const context = useContext(AuthContext)
+    if (!context) {
+        throw new Error('useAuth must be used within an AuthProvider')
+    }
+    return context
 }

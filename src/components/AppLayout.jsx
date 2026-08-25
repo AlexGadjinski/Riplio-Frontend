@@ -1,63 +1,67 @@
-import { Layout, Menu, Avatar, Dropdown } from 'antd'
-import { UserOutlined, LogoutOutlined } from '@ant-design/icons'
-import { useNavigate, useLocation, Outlet, Link } from 'react-router-dom'
+import { Card, Button, Row, Col } from 'antd'
+import { TeamOutlined, FireOutlined, RocketOutlined } from '@ant-design/icons'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import Logo from './Logo'
 
-const { Header, Content } = Layout
-
-function AppLayout() {
-    const { user, logout } = useAuth()
+function HomePage() {
+    const { user } = useAuth()
     const navigate = useNavigate()
-    const location = useLocation()
-
-    const handleLogout = () => {
-        logout()
-        navigate('/login')
-    }
-
-    const navItems = [
-        { key: '/', label: <Link to="/">Home</Link> },
-        { key: '/communities', label: <Link to="/communities">Communities</Link> },
-        { key: '/trending', label: <Link to="/trending">Trending</Link> },
-    ]
-
-    const userMenuItems = [
-        { key: 'logout', icon: <LogoutOutlined />, label: 'Log out', onClick: handleLogout },
-    ]
 
     return (
-        <Layout style={{ minHeight: '100vh', background: 'transparent' }}>
-            <Header
+        <div>
+            <div
                 style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    background: '#fff',
-                    paddingInline: 24,
-                    borderBottom: '1px solid #f0f0f0',
+                    borderRadius: 16,
+                    padding: '48px 40px',
+                    color: '#fff',
+                    backgroundImage:
+                        'linear-gradient(120deg, rgba(8,145,178,0.85), rgba(37,99,235,0.85)), url(https://images.unsplash.com/photo-1505142468610-359e7d316be0?auto=format&fit=crop&w=1600&q=80)',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    marginBottom: 32,
                 }}
             >
-                <div style={{ marginRight: 32 }}>
-                    <Logo size={22} style={{ marginBottom: 0 }} />
-                </div>
-                <Menu
-                    mode="horizontal"
-                    selectedKeys={[location.pathname]}
-                    items={navItems}
-                    style={{ flex: 1, borderBottom: 'none' }}
-                />
-                <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
-                    <div style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <Avatar icon={<UserOutlined />} src={user?.avatarUrl} />
-                        <span>{user?.username}</span>
-                    </div>
-                </Dropdown>
-            </Header>
-            <Content style={{ padding: 24, maxWidth: 900, margin: '0 auto', width: '100%' }}>
-                <Outlet />
-            </Content>
-        </Layout>
+                <h1 style={{ color: '#fff', fontSize: 34, marginBottom: 8 }}>
+                    Welcome back, {user?.username} 👋
+                </h1>
+                <p style={{ fontSize: 16, opacity: 0.9, marginBottom: 24 }}>
+                    Dive into communities, share posts and send ripples across Riplio.
+                </p>
+                <Button
+                    type="primary"
+                    size="large"
+                    icon={<RocketOutlined />}
+                    onClick={() => navigate('/communities')}
+                >
+                    Browse communities
+                </Button>
+            </div>
+
+            <Row gutter={16}>
+                <Col xs={24} sm={8}>
+                    <Card hoverable onClick={() => navigate('/communities')}>
+                        <TeamOutlined style={{ fontSize: 28, color: '#0891b2' }} />
+                        <h3 style={{ marginTop: 12 }}>Communities</h3>
+                        <p style={{ color: '#888' }}>Find your people and join the conversation.</p>
+                    </Card>
+                </Col>
+                <Col xs={24} sm={8}>
+                    <Card hoverable onClick={() => navigate('/trending')}>
+                        <FireOutlined style={{ fontSize: 28, color: '#f97316' }} />
+                        <h3 style={{ marginTop: 12 }}>Trending</h3>
+                        <p style={{ color: '#888' }}>See the posts making the biggest ripples right now.</p>
+                    </Card>
+                </Col>
+                <Col xs={24} sm={8}>
+                    <Card hoverable>
+                        <RocketOutlined style={{ fontSize: 28, color: '#2563eb' }} />
+                        <h3 style={{ marginTop: 12 }}>Get started</h3>
+                        <p style={{ color: '#888' }}>Create a post and share your first ripple.</p>
+                    </Card>
+                </Col>
+            </Row>
+        </div>
     )
 }
 
-export default AppLayout
+export default HomePage
