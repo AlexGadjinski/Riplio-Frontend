@@ -2,6 +2,9 @@ import { Card, Avatar, Typography, Space } from 'antd'
 import PostMedia from './PostMedia'
 
 function PostCard({ post, rank, onClick }) {
+    const authorLabel = post.communityName || post.authorUsername
+    const authorAvatar = post.communityAvatarUrl || post.authorAvatarUrl
+
     return (
         <Card hoverable onClick={onClick} style={{ marginBottom: 16 }}>
             <div style={{ display: 'flex', gap: 16 }}>
@@ -20,8 +23,8 @@ function PostCard({ post, rank, onClick }) {
                 ) : null}
                 <div style={{ flex: 1, minWidth: 0 }}>
                     <Space size={8} style={{ marginBottom: 8 }}>
-                        <Avatar size={20} src={post.communityAvatarUrl} />
-                        <Typography.Text type="secondary">{post.communityName}</Typography.Text>
+                        <Avatar size={20} src={authorAvatar} />
+                        <Typography.Text type="secondary">{authorLabel}</Typography.Text>
                     </Space>
                     <Typography.Title level={4} style={{ marginTop: 0, marginBottom: 8 }}>
                         {post.title}
