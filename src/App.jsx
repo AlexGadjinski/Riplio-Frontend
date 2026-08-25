@@ -12,6 +12,7 @@ import PostPage from './pages/PostPage'
 import MembersPage from './pages/MembersPage'
 import BansPage from './pages/BansPage'
 import CommunitySettingsPage from './pages/CommunitySettingsPage'
+import ModerationPage from './pages/ModerationPage'
 
 function App() {
     return (
@@ -35,6 +36,7 @@ function App() {
                         <Route path="/communities/:id/members" element={<MembersPage/>}/>
                         <Route path="/communities/:id/bans" element={<BansPage />} />
                         <Route path="/communities/:id/settings" element={<CommunitySettingsPage />} />
+                        <Route path="/communities/:id/reports" element={<ModerationPage />} />
                     </Route>
                 </Routes>
             </BrowserRouter>

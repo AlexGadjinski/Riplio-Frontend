@@ -117,6 +117,9 @@ function CommunityPage() {
                             <Button onClick={() => navigate(`/communities/${id}/members`)}>Manage members</Button>
                         ) : null}
                         {isModerator ? (
+                            <Button onClick={() => navigate(`/communities/${id}/reports`)}>Reports</Button>
+                        ) : null}
+                        {isModerator ? (
                             <Button onClick={() => navigate(`/communities/${id}/settings`)}>Settings</Button>
                         ) : null}
                         <Button
