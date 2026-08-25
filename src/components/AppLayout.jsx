@@ -19,6 +19,7 @@ function AppLayout() {
     const navItems = [
         { key: '/', label: <Link to="/">Home</Link> },
         { key: '/communities', label: <Link to="/communities">Communities</Link> },
+        { key: '/trending', label: <Link to="/trending">Trending</Link> },
     ]
 
     const userMenuItems = [

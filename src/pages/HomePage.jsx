@@ -46,7 +46,7 @@ function HomePage() {
                     </Card>
                 </Col>
                 <Col xs={24} sm={8}>
-                    <Card hoverable onClick={() => navigate('/communities')}>
+                    <Card hoverable onClick={() => navigate('/trending')}>
                         <FireOutlined style={{ fontSize: 28, color: '#f97316' }} />
                         <h3 style={{ marginTop: 12 }}>Trending</h3>
                         <p style={{ color: '#888' }}>See the posts making the biggest ripples right now.</p>
