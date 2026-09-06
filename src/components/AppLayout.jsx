@@ -1,7 +1,7 @@
 import { Layout, Menu, Avatar, Dropdown } from 'antd'
 import { UserOutlined, LogoutOutlined } from '@ant-design/icons'
 import { useNavigate, useLocation, Outlet, Link } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../hooks/useAuth'
 import Logo from './Logo'
 
 const { Header, Content } = Layout

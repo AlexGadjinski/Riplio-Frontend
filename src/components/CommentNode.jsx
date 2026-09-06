@@ -3,7 +3,7 @@ import {Avatar, Button, Input, message, Popconfirm, Space, Typography} from 'ant
 import {UserOutlined} from '@ant-design/icons'
 import axiosClient from '../api/axiosClient'
 import {handleApiError} from '../utils/errorHandler'
-import {useAuth} from '../context/AuthContext'
+import {useAuth} from '../hooks/useAuth'
 import CommentComposer from './CommentComposer'
 import PostMedia from './PostMedia'
 import RippleVote from './RippleVote'

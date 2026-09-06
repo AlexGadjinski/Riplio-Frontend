@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import axiosClient from '../api/axiosClient'
 import { useInfiniteScroll } from '../hooks/useInfiniteScroll'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../hooks/useAuth'
 import PostCard from '../components/PostCard'
 import EditProfileModal from '../components/EditProfileModal'
 

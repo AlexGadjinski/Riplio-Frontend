@@ -1,7 +1,7 @@
 import { Card, Button, Row, Col } from 'antd'
 import { TeamOutlined, FireOutlined, UserOutlined, RocketOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../hooks/useAuth'
 
 function HomePage() {
     const { user } = useAuth()

@@ -3,7 +3,7 @@ import { Avatar, Button, Form, Input, Modal, Space, Upload, message } from 'antd
 import { UploadOutlined, UserOutlined } from '@ant-design/icons'
 import axiosClient from '../api/axiosClient'
 import { handleApiError } from '../utils/errorHandler'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../hooks/useAuth'
 
 function EditProfileModal({ open, onClose }) {
     const { user, updateUser } = useAuth()

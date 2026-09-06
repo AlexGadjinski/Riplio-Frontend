@@ -5,7 +5,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import axiosClient from '../api/axiosClient'
 import { handleApiError } from '../utils/errorHandler'
 import { useInfiniteScroll } from '../hooks/useInfiniteScroll'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../hooks/useAuth'
 import { useNavigate, useParams } from 'react-router-dom'
 
 const PAGE_SIZE = 20
