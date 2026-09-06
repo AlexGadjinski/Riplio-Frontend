@@ -2,7 +2,7 @@ import {useState} from 'react'
 import {Button, Card, Form, Input, message} from 'antd'
 import {Link, useNavigate} from 'react-router-dom'
 import axiosClient from '../api/axiosClient'
-import {useAuth} from '../context/AuthContext'
+import {useAuth} from '../hooks/useAuth'
 import Logo from '../components/Logo'
 import {handleApiError} from '../utils/errorHandler'
 
@@ -15,16 +15,16 @@ function LoginPage() {
         setLoading(true)
         try {
             const loginResponse = await axiosClient.post('/auth/login', values)
-            const accessToken = loginResponse.data.accessToken
-            localStorage.setItem('token', accessToken)
-
+            const { accessToken, refreshToken } = loginResponse.data
+            localStorage.setItem('accessToken', accessToken)
+            localStorage.setItem('refreshToken', refreshToken)
             const meResponse = await axiosClient.get('/users/me')
-            login(accessToken, meResponse.data)
-
+            login({ accessToken, refreshToken }, meResponse.data)
             message.success('Logged in successfully')
             navigate('/')
         } catch (error) {
-            localStorage.removeItem('token')
+            localStorage.removeItem('accessToken')
+            localStorage.removeItem('refreshToken')
             handleApiError(error, null, 'Invalid username or password')
         } finally {
             setLoading(false)
