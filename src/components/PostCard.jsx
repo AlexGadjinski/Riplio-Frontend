@@ -1,5 +1,6 @@
 import { Card, Avatar, Typography, Space } from 'antd'
 import PostMedia from './PostMedia'
+import RippleVote from './RippleVote'
 
 function PostCard({ post, rank, onClick }) {
     const authorLabel = post.communityName || post.authorUsername
@@ -38,10 +39,14 @@ function PostCard({ post, rank, onClick }) {
                         </div>
                     ) : null}
                     <Space size={24}>
-                        <Space size={6}>
-                            <span>🌊</span>
-                            <span>{post.rippleScore}</span>
-                        </Space>
+                        <div onClick={(e) => e.stopPropagation()}>
+                            <RippleVote
+                                targetType="posts"
+                                targetId={post.id}
+                                score={post.rippleScore}
+                                myRipple={post.myRipple}
+                            />
+                        </div>
                         <Space size={6}>
                             <span>💬</span>
                             <span>{post.commentCount}</span>
